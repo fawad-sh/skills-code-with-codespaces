@@ -1,0 +1,1 @@
+GET http://localhost:5255/weatherforecast HTTP/1.1
