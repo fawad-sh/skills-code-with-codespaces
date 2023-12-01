@@ -1,1 +1,5 @@
 GET http://localhost:5130/api/commands HTTP/1.1
+
+
+// command by id
+GET http://localhost:5130/api/commands/3 HTTP/1.1
