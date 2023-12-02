@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 using CommandAPI.Data;
 
 IConfiguration configuration = new ConfigurationBuilder()
@@ -12,7 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CommandContext>(opt => opt.UseSqlite(
     configuration["ConnectionStrings:SqliteConnection"]));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(s =>
+{
+  s.SerializerSettings.ContractResolver = new
+  CamelCasePropertyNamesContractResolver();
+});
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Mock data
 //builder.Services.AddScoped<ICommandAPIRepo, MockCommandAPIRepo>();

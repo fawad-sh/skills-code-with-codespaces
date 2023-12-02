@@ -13,19 +13,33 @@ public class SqlCommandAPIRepo : ICommandAPIRepo
         _context = context;
     }
     
+    public bool SaveChanges()
+    {
+        return (_context.SaveChanges() >= 0);
+    }
+
     public void CreateCommand(Command cmd)
     {
-        throw new System.NotImplementedException();
+        if (cmd == null)
+        {
+            throw new ArgumentNullException(nameof(cmd));
+        }
+        _context.CommandItems.Add(cmd);
     }
 
     public void UpdateCommand(Command cmd)
     {
-        throw new System.NotImplementedException();
+        // nothing required, data update is handled in controller by entoty framework
     }
 
     public void DeleteCommand(Command  cmd)
     {
-        throw new System.NotImplementedException();
+        if (cmd == null)
+        {
+            throw new ArgumentNullException(nameof(cmd));
+        }
+        _context.CommandItems.Remove(cmd);
+        
     }
 
     public Command GetCommandById(int id)

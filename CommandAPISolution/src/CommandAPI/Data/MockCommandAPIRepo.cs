@@ -5,6 +5,11 @@ namespace CommandAPI.Data;
 
 public class MockCommandAPIRepo : ICommandAPIRepo
 {
+    public bool SaveChanges()
+    {
+        return false;
+    }
+    
     public void CreateCommand(Command cmd)
     {
         throw new System.NotImplementedException();
