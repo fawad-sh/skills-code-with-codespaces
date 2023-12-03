@@ -119,7 +119,143 @@ public class CommandsControllerTests : IDisposable
 
     }
 
-    
+    [Fact]
+    public void GetCommandById_Returns200Ok_WhenValidIdProvided()
+    {
+        //Arrange
+        mockRepo.Setup( repo => 
+            repo.GetCommandById(1)).Returns(new Command { Id=1,
+            HowTo="mock",Line="Mock",Platform="Moq"});
+        
+        var controller = new CommandsController(mockRepo.Object, mapper);
+
+        //Act
+        var result = controller.GetCommandById(1);
+
+        //Assert
+        Assert.IsType<OkObjectResult>(result.Result);
+    }
+
+    [Fact]
+    public void GetCommandById_ReturnsCorrectType_WhenValidIdProvided()
+    {
+        //Arrange
+        mockRepo.Setup( repo => 
+            repo.GetCommandById(1)).Returns(new Command { Id=1,
+            HowTo="mock",Line="Mock",Platform="Moq"});
+        
+        var controller = new CommandsController(mockRepo.Object, mapper);
+
+        //Act
+        var result = controller.GetCommandById(1);
+
+        //Assert
+        Assert.IsType<ActionResult<CommandReadDto>>(result);
+    }
+
+    [Fact]
+    public void CreateCommand_ReturnsCorrectType_WhenValidObjectSubmitted()
+    {
+        //Arrange
+        mockRepo.Setup( repo => 
+            repo.GetCommandById(1)).Returns(new Command{
+                Id=1,HowTo="mock",Line="Mock",Platform="Moq"
+            });
+
+        var controller = new CommandsController(mockRepo.Object, mapper);
+
+        //Act
+        var result = controller.CreateCommand(new CommandCreateDto {});
+
+        //Assert
+        Assert.IsType<ActionResult<CommandReadDto>>(result);
+
+    }
+
+    [Fact]
+    public void CreateCommand_Returns201Created_WhenValidObjectSubmitted()
+    {
+        //Arrange
+        mockRepo.Setup( repo => 
+            repo.GetCommandById(1)).Returns(new Command{
+                Id=1,HowTo="mock",Line="Mock",Platform="Moq"
+            });
+
+        var controller = new CommandsController(mockRepo.Object, mapper);
+
+        //Act
+        var result = controller.CreateCommand(new CommandCreateDto {});
+
+        //Assert
+        Assert.IsType<CreatedAtRouteResult>(result.Result);
+
+    }
+
+    [Fact]
+    public void UpdateCommand_Returns204NoContent_WhenValidObjectSubmitted()
+    {
+        //Arrange
+        mockRepo.Setup( repo =>
+            repo.GetCommandById(1)).Returns(new Command{Id=1,HowTo="mock",Line="Mock",Platform="Moq"});
+
+        var controller = new CommandsController(mockRepo.Object, mapper);
+
+        //Act
+        var result = controller.UpdateCommand(1, new CommandUpdateDto{});
+
+        //Assert
+        Assert.IsType<NoContentResult>(result);
+
+    }
+
+    [Fact]
+    public void UpdateCommand_Returns404NotFound_WhenNonExistentResourceIdSubmitted()
+    {
+        //Arrange
+        mockRepo.Setup( repo =>
+            repo.GetCommandById(1)).Returns( () => null);
+
+        var controller = new CommandsController(mockRepo.Object, mapper);
+
+        //Act
+        var result = controller.UpdateCommand(1, new CommandUpdateDto{});
+
+        //Assert
+        Assert.IsType<NotFoundResult>(result);
+
+    }
+
+    [Fact]
+    public void DeleteCommand_Returns204_WhenValidResourceIdSubmitted()
+    {
+        //Arrange
+        mockRepo.Setup( repo =>
+            repo.GetCommandById(1)).Returns(new Command{Id=1,HowTo="mock",Line="Mock",Platform="Moq"});
+        
+        var controller = new CommandsController(mockRepo.Object, mapper);
+
+        //Act
+        var result = controller.DeleteCommand(1);
+
+        //Assert
+        Assert.IsType<NoContentResult>(result);
+    }
+
+    [Fact]
+    public void DeleteCommand_Returns404_WhenNonExistentResourceIdSubmitted()
+    {
+        //Arrange
+        mockRepo.Setup( repo =>
+            repo.GetCommandById(1)).Returns(() => null);
+        
+        var controller = new CommandsController(mockRepo.Object, mapper);
+
+        //Act
+        var result = controller.DeleteCommand(1);
+
+        //Assert
+        Assert.IsType<NotFoundResult>(result);
+    }
 
     private List<Command> GetCommands(int num)
     {
