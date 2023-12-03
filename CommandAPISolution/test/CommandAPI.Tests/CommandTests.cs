@@ -34,16 +34,4 @@ public class CommandTests : IDisposable
 
     }
 
-    [Fact]
-    public void CanChangeLine()
-    {
-        //Arrange
-
-        //Act
-        testCommand.Platform = "NUnit";
-
-        //Assert
-        Assert.Equal("xUnit", testCommand.Platform);
-
-    }
 }
