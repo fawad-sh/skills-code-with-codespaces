@@ -3,15 +3,19 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 using CommandAPI.Data;
 
-IConfiguration configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
-    .Build();
+// IConfiguration configuration = new ConfigurationBuilder()
+//     .AddJsonFile("appsettings.json")
+//     .Build();
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+IConfiguration configuration = builder.Configuration;
+
 // Add services to the container.
+// SqliteConnection defined in User secrets
 builder.Services.AddDbContext<CommandContext>(opt => opt.UseSqlite(
-    configuration["ConnectionStrings:SqliteConnection"]));
+    configuration["SqliteConnection"]));
 
 builder.Services.AddControllers().AddNewtonsoftJson(s =>
 {
