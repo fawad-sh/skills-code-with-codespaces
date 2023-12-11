@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Newtonsoft.Json.Serialization;
 using CommandAPI.Data;
 
@@ -16,6 +17,14 @@ IConfiguration configuration = builder.Configuration;
 // SqliteConnection defined in User secrets
 builder.Services.AddDbContext<CommandContext>(opt => opt.UseSqlite(
     configuration["SqliteConnection"]));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+  .AddJwtBearer( opt => 
+  {
+    opt.Audience = configuration["ResourceId"];
+    opt.Authority = $"{configuration["InstanceId"]}{configuration["TenantId"]}";
+    opt.RequireHttpsMetadata = false;
+  });
 
 builder.Services.AddControllers().AddNewtonsoftJson(s =>
 {
@@ -44,8 +53,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

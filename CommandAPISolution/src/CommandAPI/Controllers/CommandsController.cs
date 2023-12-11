@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
-
+using Microsoft.AspNetCore.Authorization;
 
 using CommandAPI.Data;
 using CommandAPI.Models;
@@ -31,6 +31,7 @@ public class CommandsController : ControllerBase
         return Ok(_mapper.Map<IEnumerable<CommandReadDto>>(commandItems));
     }
 
+    [Authorize]
     [HttpGet("{id}",  Name="GetCommandById")]
     public ActionResult<CommandReadDto> GetCommandById(int id)
     {
